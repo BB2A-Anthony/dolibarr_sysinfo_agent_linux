@@ -1,0 +1,11 @@
+#!/bin/bash
+# Desinstallation : arrete et supprime le service (conserve la config).
+set -e
+
+if command -v systemctl >/dev/null 2>&1; then
+    systemctl stop dolibarr-agent.service 2>/dev/null || true
+    systemctl disable dolibarr-agent.service 2>/dev/null || true
+    systemctl daemon-reload
+fi
+
+exit 0

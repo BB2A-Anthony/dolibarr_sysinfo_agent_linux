@@ -1,0 +1,16 @@
+[Unit]
+Description=Dolibarr Sysinfo Agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/dolibarr-agent/run.py --config /opt/dolibarr-agent/config.json --loop
+WorkingDirectory=/opt/dolibarr-agent
+Restart=on-failure
+RestartSec=60
+User=root
+Nice=10
+
+[Install]
+WantedBy=multi-user.target

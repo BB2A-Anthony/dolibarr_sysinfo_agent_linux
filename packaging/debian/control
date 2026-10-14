@@ -1,0 +1,12 @@
+Package: dolibarr-agent
+Version: 1.0.0
+Section: admin
+Priority: optional
+Architecture: all
+Depends: python3 (>= 3.6), python3-psutil, python3-requests
+Maintainer: BB2A-Anthony
+Description: Dolibarr Sysinfo Agent (Linux)
+ Agent Linux qui collecte les informations systemes de la machine
+ et les envoie periodiquement a l'API Dolibarr (module systeminfo)
+ via HTTP POST (JSON).
+Installed-Size: 40
