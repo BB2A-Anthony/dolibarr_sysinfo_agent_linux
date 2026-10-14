@@ -1,0 +1,24 @@
+#!/bin/bash
+# Post-installation : active et prepare le service dolibarr-agent.
+set -e
+
+INSTALL_DIR="/opt/dolibarr-agent"
+
+# Config initiale protegee (pas ecrasee a la mise a jour par dpkg/conffile)
+if [ ! -f "$INSTALL_DIR/config.json" ]; then
+    cp "$INSTALL_DIR/config.example.json" "$INSTALL_DIR/config.json"
+    chmod 600 "$INSTALL_DIR/config.json"
+fi
+
+if command -v systemctl >/dev/null 2>&1; then
+    systemctl daemon-reload
+    systemctl enable dolibarr-agent.service
+    echo "Service dolibarr-agent active."
+    echo "Editez $INSTALL_DIR/config.json puis :"
+    echo "  python3 $INSTALL_DIR/run.py --config $INSTALL_DIR/config.json --enroll CODE"
+    echo "  systemctl start dolibarr-agent"
+else
+    echo "Attention : systemd introuvable, service non active."
+fi
+
+exit 0

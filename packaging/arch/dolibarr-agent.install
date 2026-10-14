@@ -1,0 +1,22 @@
+post_install() {
+    if [ ! -f /opt/dolibarr-agent/config.json ]; then
+        cp /opt/dolibarr-agent/config.example.json /opt/dolibarr-agent/config.json
+        chmod 600 /opt/dolibarr-agent/config.json
+    fi
+    systemctl daemon-reload
+    systemctl enable dolibarr-agent.service
+    echo "Editez /opt/dolibarr-agent/config.json puis :"
+    echo "  python3 /opt/dolibarr-agent/run.py --config /opt/dolibarr-agent/config.json --enroll CODE"
+    echo "  systemctl start dolibarr-agent"
+}
+
+pre_remove() {
+    systemctl stop dolibarr-agent.service 2>/dev/null || true
+    systemctl disable dolibarr-agent.service 2>/dev/null || true
+    systemctl daemon-reload
+}
+
+post_upgrade() {
+    systemctl daemon-reload
+    systemctl restart dolibarr-agent.service 2>/dev/null || true
+}

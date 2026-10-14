@@ -121,6 +121,41 @@ sudo rm -rf /opt/dolibarr-agent
 sudo systemctl daemon-reload
 ```
 
+## Installation par paquets natifs (compilation)
+
+Le depot fournit de quoi **compiler un paquet natif** pour chaque famille de distributions.
+
+### Debian / Ubuntu / Raspbian (`.deb`)
+
+```bash
+./build-packages.sh 1.0.0
+sudo apt install ./dist/dolibarr-agent_1.0.0_all.deb
+```
+Le paquet declare les dependances `python3`, `python3-psutil`, `python3-requests` et installe le service systemd (active automatiquement, config creee avec droits 600). Le build natif ne necessite que `dpkg-deb`, present partout sur ces distributions. Compatible Debian 10-13, Ubuntu 20.04-24.04+, Raspbian/Raspberry Pi OS 10-13 (paquet `Architecture: all`, fonctionne aussi en ARM).
+
+### RHEL / AlmaLinux / Rocky / CentOS / Fedora / openSUSE (`.rpm`)
+
+Le spec est fourni dans `packaging/rpm/dolibarr-agent.spec` (gestion systemd specifique openSUSE incluse) :
+
+```bash
+# Fedora/RHEL : sudo dnf install rpm-build
+# openSUSE    : sudo zypper install rpm-build
+./build-packages.sh 1.0.0      # tente le build si rpmbuild est present
+# sinon, sur la machine cible :
+ rpmbuild -bb packaging/rpm/dolibarr-agent.spec
+sudo dnf install ./dolibarr-agent-1.0.0-1.noarch.rpm
+```
+
+### Arch Linux (`pacman`)
+
+Les sources et le `PKGBUILD` sont prepares par `build-packages.sh` dans `dist/arch/` :
+
+```bash
+cd dist/arch
+makepkg -sf
+sudo pacman -U dolibarr-agent-1.0.0-1-any.pkg.tar.zst
+```
+
 ## Connexion a une instance Dolibarr
 
 1. **Cote Dolibarr** : activer l'API (Configuration > API, module REST), installer le module `systeminfo` (voir le depot de l'agent Windows, dossier `server_module/systeminfo`).

@@ -1,0 +1,20 @@
+# PKGBUILD pour Arch Linux - Dolibarr Sysinfo Agent
+# Build : makepkg -sf  (dans un repertoire contenant ce fichier et les sources)
+
+pkgname=dolibarr-agent
+pkgver=1.0.0
+pkgrel=1
+pkgdesc="Agent Linux qui collecte les informations systemes et les envoie a l'API Dolibarr"
+arch=('any')
+url="https://github.com/BB2A-Anthony/dolibarr_sysinfo_agent_linux"
+license=('GPL3')
+depends=('python' 'python-psutil' 'python-requests')
+install=dolibarr-agent.install
+source=("agent.tar.gz")
+md5sums=('SKIP')
+
+package() {
+    install -dm755 "$pkgdir/opt/dolibarr-agent"
+    cp -r "$srcdir/agent" "$srcdir/run.py" "$srcdir/config.example.json" "$pkgdir/opt/dolibarr-agent/"
+    install -Dm644 "$srcdir/dolibarr-agent.service" "$pkgdir/usr/lib/systemd/system/dolibarr-agent.service"
+}
