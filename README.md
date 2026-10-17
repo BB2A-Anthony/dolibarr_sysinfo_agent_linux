@@ -1,6 +1,6 @@
 # Dolibarr Sysinfo Agent Linux
 
-Agent Linux qui collecte les informations systemes de la machine et les envoie periodiquement a une API Dolibarr (module `systeminfo`) via HTTP POST (JSON). Chaque machine est identifiee par un `guid` (derive de `/etc/machine-id`), ce qui permet de rattacher les informations au bon tiers.
+Agent Linux qui collecte les informations systemes de la machine et les envoie periodiquement a une API Dolibarr (module `sysinfo`) via HTTP POST (JSON). Chaque machine est identifiee par un `guid` (derive de `/etc/machine-id`), ce qui permet de rattacher les informations au bon tiers.
 
 C'est l'equivalent Linux de l'agent Windows ([dolibarr_sysinfo_agent_windows](https://github.com/BB2A-Anthony/dolibarr_sysinfo_agent_windows)) : meme format de payload, meme protocol d'enrolement, meme module serveur Dolibarr.
 
@@ -13,7 +13,7 @@ C'est l'equivalent Linux de l'agent Windows ([dolibarr_sysinfo_agent_windows](ht
 | requests | 2.31.0 | 2.32.x |
 | systemd | 219 | 256 |
 | noyau Linux | 3.10 | 6.12 |
-| Dolibarr (module systeminfo) | 11.0 | 20.0 |
+| Dolibarr (module sysinfo) | 11.0 | 20.0 |
 | API PHP (cote serveur) | 7.3 | 8.3 |
 
 ### Distributions supportees
@@ -72,7 +72,7 @@ Remarques :
 | `verify_ssl` | Verification du certificat TLS (par defaut true) |
 | `auto_update` | Mise a jour automatique activee (par defaut true, voir ci-dessous) |
 
-Pas de tiers a renseigner : la machine remonte sans affectation et est rattachee a un tiers **depuis Dolibarr** (`PUT /systeminfo/machine/{guid}/soc` avec `fk_soc`).
+Pas de tiers a renseigner : la machine remonte sans affectation et est rattachee a un tiers **depuis Dolibarr** (`PUT /sysinfo/machine/{guid}/soc` avec `fk_soc`).
 
 ## Utilisation en ligne de commande
 
@@ -159,7 +159,7 @@ sudo pacman -U dolibarr-agent-1.0.0-1-any.pkg.tar.zst
 
 ## Mise a jour automatique
 
-L'agent verifie sa version apres chaque envoi de rapport en interrogeant le module Dolibarr `systeminfo` (`GET /api/index.php/sysinfo/config`), qui expose la derniere version disponible et l'URL du dossier de mise a jour sur GitHub (`releases/download/<version>/update/`). Si la version distante est plus recente, l'agent telecharge le package `dolibarr_agent_linux.zip`, remplace ses fichiers d'installation (`config.json` preserve) et redemarre automatiquement.
+L'agent verifie sa version apres chaque envoi de rapport en interrogeant le module Dolibarr `sysinfo` (`GET /api/index.php/sysinfo/config`), qui expose la derniere version disponible et l'URL du dossier de mise a jour sur GitHub (`releases/download/<version>/update/`). Si la version distante est plus recente, l'agent telecharge le package `dolibarr_agent_linux.zip`, remplace ses fichiers d'installation (`config.json` preserve) et redemarre automatiquement.
 
 Pour desactiver ce comportement : `"auto_update": false` dans `config.json`.
 
@@ -167,7 +167,7 @@ Cote serveur, la version publiee se regle dans le descripteur du module (`agentL
 
 ## Connexion a une instance Dolibarr
 
-1. **Cote Dolibarr** : activer l'API (Configuration > API, module REST), installer le module `systeminfo` (voir le depot de l'agent Windows, dossier `server_module/systeminfo`).
+1. **Cote Dolibarr** : activer l'API (Configuration > API, module REST), installer le module `sysinfo` (voir le depot de l'agent Windows, dossier `server_module/systeminfo`).
 2. **Cote agent** : renseigner `api_url` dans `config.json`, puis soit utiliser l'enrolement (`--enroll CODE` depuis la fiche tiers), soit definir une cle API (`--set-api-key`).
 3. L'authentification Dolibarr utilise l'en-tete `DOLIBARR_API_KEY` (pas de Bearer).
 
