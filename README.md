@@ -167,7 +167,7 @@ Cote serveur, la version publiee se regle dans le descripteur du module (`agentL
 
 ## Connexion a une instance Dolibarr
 
-1. **Cote Dolibarr** : activer l'API (Configuration > API, module REST), installer le module `sysinfo` (voir le depot de l'agent Windows, dossier `server_module/systeminfo`).
+1. **Cote Dolibarr** : activer l'API (Configuration > API, module REST), installer le module [dolibarr_module_sysinfo](https://github.com/BB2A-Anthony/dolibarr_module_sysinfo).
 2. **Cote agent** : renseigner `api_url` dans `config.json`, puis soit utiliser l'enrolement (`--enroll CODE` depuis la fiche tiers), soit definir une cle API (`--set-api-key`).
 3. L'authentification Dolibarr utilise l'en-tete `DOLIBARR_API_KEY` (pas de Bearer).
 
