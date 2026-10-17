@@ -70,11 +70,19 @@ def main():
         import time
 
         time.sleep(config.get("initial_delay_seconds", 30))
+        from agent.updater import apply_update, check_for_update
+
         while True:
             try:
                 send_report(config)
             except Exception as exc:
                 logging.getLogger("run").error("Report failed: %s", exc)
+            try:
+                info = check_for_update(config)
+                if info:
+                    apply_update(config, info)
+            except Exception as exc:
+                logging.getLogger("run").error("Auto-update failed: %s", exc)
             time.sleep(config.get("poll_interval_seconds", 14400))
     else:
         payload = send_report(config)
