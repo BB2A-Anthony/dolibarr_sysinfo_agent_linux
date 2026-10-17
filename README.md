@@ -70,6 +70,7 @@ Remarques :
 | `poll_interval_seconds` | Intervalle entre deux envois (par defaut 14400 s = 4 h) |
 | `timeout_seconds` | Timeout HTTP (par defaut 30 s) |
 | `verify_ssl` | Verification du certificat TLS (par defaut true) |
+| `auto_update` | Mise a jour automatique activee (par defaut true, voir ci-dessous) |
 
 Pas de tiers a renseigner : la machine remonte sans affectation et est rattachee a un tiers **depuis Dolibarr** (`PUT /systeminfo/machine/{guid}/soc` avec `fk_soc`).
 
@@ -155,6 +156,14 @@ cd dist/arch
 makepkg -sf
 sudo pacman -U dolibarr-agent-1.0.0-1-any.pkg.tar.zst
 ```
+
+## Mise a jour automatique
+
+L'agent verifie sa version apres chaque envoi de rapport en interrogeant le module Dolibarr `systeminfo` (`GET /api/index.php/sysinfo/config`), qui expose la derniere version disponible et l'URL du dossier de mise a jour sur GitHub (`releases/download/<version>/update/`). Si la version distante est plus recente, l'agent telecharge le package `dolibarr_agent_linux.zip`, remplace ses fichiers d'installation (`config.json` preserve) et redemarre automatiquement.
+
+Pour desactiver ce comportement : `"auto_update": false` dans `config.json`.
+
+Cote serveur, la version publiee se regle dans le descripteur du module (`agentLinuxVersion` / `agentLinuxUpdateUrl`) ou via les constantes `SYSINFO_AGENT_LINUX_VERSION` / `SYSINFO_AGENT_LINUX_UPDATE_URL`.
 
 ## Connexion a une instance Dolibarr
 
